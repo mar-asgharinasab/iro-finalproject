@@ -1,38 +1,39 @@
 from rest_framework import serializers
-from .models import Product, Category, Feature, ProductFeatureValue, ProductOption, InstallmentPlan, Discount
+from .models import Product, ProductImage, ProductColor, Brand, Feature
 
-class CategorySerializer(serializers.ModelSerializer):
+class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
-        fields = '__all__'
+        model = ProductImage
+        fields = ['image', 'alt_text']
 
-class ProductFeatureValueSerializer(serializers.ModelSerializer):
+class ProductColorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProductFeatureValue
-        fields = '__all__'
+        model = ProductColor
+        fields = ['color_name', 'hex_code', 'extra_price']
 
-class ProductOptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductOption
-        fields = '__all__'
 
-class InstallmentPlanSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = InstallmentPlan
-        fields = '__all__'
 
-class DiscountSerializer(serializers.ModelSerializer):
+class BrandSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Discount
-        fields = '__all__'
+        model = Brand
+        fields = ['name', 'slug', 'logo']
+class FeatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feature
+        fields = ['id', 'key', 'value', 'is_main_feature']
 
 class ProductSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True, read_only=True)
-    feature_values = ProductFeatureValueSerializer(many=True, read_only=True)
-    options = ProductOptionSerializer(many=True, read_only=True)
-    installment_plans = InstallmentPlanSerializer(many=True, read_only=True)
-    discounts = DiscountSerializer(many=True, read_only=True)
+    images = ProductImageSerializer(many=True, read_only=True)
+    colors = ProductColorSerializer(many=True, read_only=True)
+    features = FeatureSerializer(many=True, read_only=True)  # ✅ اینجا سریالایزر کامل
+
+    brand = BrandSerializer(read_only=True)
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = [
+            'id', 'name', 'slug', 'description',
+            'base_price', 'brand', 'images', 'colors', 'features'
+        ]
+
+# serializers.py
