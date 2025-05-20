@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',      # اگر هنوز نصب نکردی: pip install djangorestframework
     'store',
     'corsheaders',
+    'colorfield',
 ]
 
 MIDDLEWARE = [

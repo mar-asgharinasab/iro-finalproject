@@ -11,6 +11,18 @@ class ProductColorSerializer(serializers.ModelSerializer):
         model = ProductColor
         fields = ['color_name', 'hex_code', 'extra_price']
 
+class ProductSerializer(serializers.ModelSerializer):
+    colors = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'slug', 'description', 'base_price', 'colors']
+
+    def get_colors(self, obj):
+        if obj.colors.exists():
+            return ProductColorSerializer(obj.colors.all(), many=True).data
+        return None  # یا می‌تونی [] برگردونی بسته به فرانتت
+
 
 
 class BrandSerializer(serializers.ModelSerializer):
